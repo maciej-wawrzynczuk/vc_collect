@@ -1,7 +1,14 @@
+import argparse
 from pyVim.connect import SmartConnectNoSSL, Disconnect
 from pyVmomi import vim, vmodl
 from contextlib import contextmanager
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--address', action='store', required=True)
+    parser.add_argument('--user', action='store', required=True)
+    parser.add_argument('--password', action='store', required=True)
+    return parser.parse_args()
 
 @contextmanager
 def connect_vc(host, user, password):
@@ -53,7 +60,8 @@ def mk_view_ref(si, obj_type):
 # TODO: destroy it
 
 def vc_collect():
-    with connect_vc("localhost", "user", "pw") as si:
+    args = parse_args()
+    with connect_vc(args.address, args.user, args.password) as si:
         view_ref = mk_view_ref(si, [vim.VirtualMachine])
         
         traversal_spec = mk_traversal_spec(view_ref)
