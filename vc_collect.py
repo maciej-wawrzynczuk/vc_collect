@@ -8,7 +8,7 @@ def parse_args():
     parser.add_argument('--address', action='store', required=True)
     parser.add_argument('--user', action='store', required=True)
     parser.add_argument('--password', action='store', required=True)
-    parser.add_argument('properties', nargs='+')
+    parser.add_argument('properties', nargs='*')
     return parser.parse_args()
 
 @contextmanager
@@ -60,6 +60,11 @@ def mk_view_ref(si, obj_type):
     return view_ref
 # TODO: destroy it
 
+
+def parse_content(content):
+    return {ps.name: ps.val for ps in content.propSet}
+
+
 def vc_collect():
     args = parse_args()
     with connect_vc(args.address, args.user, args.password) as si:
@@ -67,11 +72,12 @@ def vc_collect():
         
         traversal_spec = mk_traversal_spec(view_ref)
         obj_spec = mk_obj_spec(view_ref, traversal_spec)
-        properties = ["name"]
+        properties = args.properties
         prop_spec = mk_prop_spec(vim.VirtualMachine, properties)
         filter_spec = mk_filter_spec([obj_spec], [prop_spec])
         
         collector = si.content.propertyCollector
         props = collector.RetrieveProperties([filter_spec])
 
-        print(props)
+        pprops = map(parse_content, props)
+        print(list(pprops))
