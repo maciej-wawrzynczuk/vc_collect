@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 from pyVim.connect import SmartConnectNoSSL, Disconnect
 from pyVmomi import vim, vmodl
 from contextlib import contextmanager
@@ -22,7 +20,7 @@ def mk_filter_spec(obj_set, prop_set):
     fs.propSet = prop_set
     return fs
 
-def mk_obj_spec(view_ref, traverse_spec):
+def mk_obj_spec(view_ref, traversal_spec):
     os = vmodl.query.PropertyCollector.ObjectSpec()
     os.obj = view_ref
     os.skip = True
@@ -54,16 +52,17 @@ def mk_view_ref(si, obj_type):
     return view_ref
 # TODO: destroy it
 
-with connect_vc("localhost", "user", "pw") as si:
-    view_ref = mk_view_ref(si, [vim.VirtualMachine])
-    
-    traversal_spec = mk_traversal_spec(view_ref)
-    obj_spec = mk_obj_spec(view_ref, traversal_spec)
-    properties = ["name"]
-    prop_spec = mk_prop_spec(vim.VirtualMachine, properties)
-    filter_spec = mk_filter_spec([obj_spec], [prop_spec])
+def vc_collect():
+    with connect_vc("localhost", "user", "pw") as si:
+        view_ref = mk_view_ref(si, [vim.VirtualMachine])
+        
+        traversal_spec = mk_traversal_spec(view_ref)
+        obj_spec = mk_obj_spec(view_ref, traversal_spec)
+        properties = ["name"]
+        prop_spec = mk_prop_spec(vim.VirtualMachine, properties)
+        filter_spec = mk_filter_spec([obj_spec], [prop_spec])
+        
+        collector = si.content.propertyCollector
+        props = collector.RetrieveProperties([filter_spec])
 
-    collector = si.content.propertyCollector
-    props = collector.RetrieveProperties([filter_spec])
-
-    print(props)
+        print(props)
