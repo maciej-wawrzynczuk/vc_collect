@@ -8,6 +8,7 @@ def parse_args():
     parser.add_argument('--address', action='store', required=True)
     parser.add_argument('--user', action='store', required=True)
     parser.add_argument('--password', action='store', required=True)
+    parser.add_argument('properties', nargs='+')
     return parser.parse_args()
 
 @contextmanager
