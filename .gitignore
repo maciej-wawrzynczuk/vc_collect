@@ -8,4 +8,4 @@ venv/
 .venv/
 __pycache__/
 *.pyc
-
+vc_collect.egg-info
