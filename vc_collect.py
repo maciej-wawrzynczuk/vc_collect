@@ -2,6 +2,7 @@ import argparse
 from pyVim.connect import SmartConnectNoSSL, Disconnect
 from pyVmomi import vim, vmodl
 from contextlib import contextmanager
+import json
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -62,7 +63,7 @@ def mk_view_ref(si, obj_type):
 
 
 def parse_content(content):
-    return {ps.name: ps.val for ps in content.propSet}
+    return {ps.name: str(ps.val) for ps in content.propSet}
 
 
 def vc_collect():
@@ -80,4 +81,4 @@ def vc_collect():
         props = collector.RetrieveProperties([filter_spec])
 
         pprops = map(parse_content, props)
-        print(list(pprops))
+        print(json.dumps(list(pprops), indent=4))
