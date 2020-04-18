@@ -1,4 +1,7 @@
 # vc_collect
+## Install
+pip install git+git://github.com/maciej-wawrzynczuk/vc_collect.git
+
 ## Usage
     usage: vc_collect [-h] --address ADDRESS --user USER --password PASSWORD
 		      [properties [properties ...]]

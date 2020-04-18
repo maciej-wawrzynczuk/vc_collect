@@ -7,6 +7,6 @@ setup(
     name="vc_collect",
     version="0.1",
     packages=find_packages(),
-    scripts=["vc_collect"],
+    scripts=["vc_collect/vc_collect"],
     install_requires=["pyvmomi"]
 )
