@@ -5,11 +5,15 @@ from contextlib import contextmanager
 import json
 
 def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--address', action='store', required=True)
-    parser.add_argument('--user', action='store', required=True)
-    parser.add_argument('--password', action='store', required=True)
-    parser.add_argument('properties', nargs='*')
+    parser = argparse.ArgumentParser(description="Collect data from vcenter")
+    parser.add_argument('--address', action='store', required=True,
+                        help="Vcenter adderess")
+    parser.add_argument('--user', action='store', required=True,
+                        help="Vcenter user")
+    parser.add_argument('--password', action='store', required=True,
+                        help="Vcenter password")
+    parser.add_argument('properties', nargs='*',
+                        help="list of properties to collect")
     return parser.parse_args()
 
 @contextmanager
